@@ -23,3 +23,5 @@ spec:
           containerPort: 3777
         - name: models
           containerPort: 3778
+        - name: hello
+          containerPort: 3000

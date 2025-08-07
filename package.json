@@ -1,0 +1,13 @@
+{
+  "name": "mcp-hello",
+  "dependencies": {
+    "elysia": "^1.3.8"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
