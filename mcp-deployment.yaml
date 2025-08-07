@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcp
+  template:
+    metadata:
+      labels:
+        app: mcp
+    spec:
+      restartPolicy: Always
+      # imagePullSecrets:
+      #   - name: regcred
+      containers:
+      - name: swagger-mcp
+        image: europe-west9-docker.pkg.dev/ia-generation-5/futurandco/swagger-mcp:latest
+        ports:
+        - name: api
+          containerPort: 3777
+        - name: models
+          containerPort: 3778

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-service
+spec:
+  selector:
+    app: mcp
+  ports:
+  - name: api
+    port: 3777
+    targetPort: 3777
+  - name: models
+    port: 3778
+    targetPort: 3778
