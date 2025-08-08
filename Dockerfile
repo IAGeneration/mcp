@@ -16,7 +16,7 @@ RUN go install github.com/danishjsheikh/swagger-mcp@latest
 #RUN go build -o /bin/swagger-mcp main.go
 
 # ______________Stage 2: runtime image________________________
-FROM debian:bookworm-slim
+FROM debian:bookworm-slim AS base
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -41,26 +41,31 @@ RUN bun install --no-save
 # Copying the Go binary
 COPY --from=builder /go/bin/swagger-mcp /usr/local/bin/swagger-mcp
 
+#RUN npm install -g pm2
+
 EXPOSE 3777 3778 3000
+
+# Use PM2 to manage processes
+#CMD ["pm2-runtime", "ecosystem.config.js"]
 
 # Lanching 3 process in one container
 ENTRYPOINT ["sh","-c", "\
   /usr/local/bin/swagger-mcp \
     --specUrl https://api.futurandco.tv/openapi.json \
     --baseUrl https://api.futurandco.tv \
-    --security bearer \
+    #--security bearer \
     --sse \
-    --sseAddr :3777 \
-    --sseUrl http://0.0.0.0:3777/events \
-    --sseHeaders Authorization & \
+    --sseAddr :3777 & \
+    #--sseUrl http://0.0.0.0:3777/events \
+    #--sseHeaders Authorization & \
   /usr/local/bin/swagger-mcp \
     --specUrl https://models.futurandco.tv/docs/json \
     --baseUrl https://models.futurandco.tv \
-    --security bearer \
+    #--security bearer \
     --sse \
-    --sseAddr :3778 \
-    --sseUrl http://0.0.0.0:3778/events \
-    --sseHeaders Authorization & \
+    --sseAddr :3778 & \
+    #--sseUrl http://0.0.0.0:3778/events \
+    #--sseHeaders Authorization & \
   bun run hello.js & \
   wait\
 "]
