@@ -2,18 +2,6 @@
 FROM golang:1.24-alpine AS builder
 
 RUN go install github.com/danishjsheikh/swagger-mcp@latest
-#WORKDIR /src
-
-# grab modules
-#COPY go.mod go.sum ./
-
-#RUN go mod download
-
-# Copy the rest of the code
-#COPY . .
-
-# compile 
-#RUN go build -o /bin/swagger-mcp main.go
 
 # ______________Stage 2: runtime image________________________
 FROM debian:bookworm-slim AS base
@@ -41,12 +29,7 @@ RUN bun install --no-save
 # Copying the Go binary
 COPY --from=builder /go/bin/swagger-mcp /usr/local/bin/swagger-mcp
 
-#RUN npm install -g pm2
-
 EXPOSE 3777 3778 3000
-
-# Use PM2 to manage processes
-#CMD ["pm2-runtime", "ecosystem.config.js"]
 
 # Lanching 3 process in one container
 ENTRYPOINT ["sh","-c", "\
