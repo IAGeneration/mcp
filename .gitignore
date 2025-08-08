@@ -1,2 +1,9 @@
 .idea
 .vscode
+app
+go.mod
+go.sum
+main.go
+bun.lock
+README.md 
+LICENSE.md
